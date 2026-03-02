@@ -9,6 +9,9 @@ from services import (
     view_transactions
 )
 
+# Import validation
+from validation import validate_username
+
 # Import menu display function
 from menu import show_menu
 
@@ -25,16 +28,22 @@ def main():
         print("❌ Invalid input.")
         return
 
-    # ----------------------------
+    # ============================
     # REGISTRATION
-    # ----------------------------
+    # ============================
     if choice == 1:
-        username = input("Username: ")
+
+        # Username validation
+        while True:
+            username = input("Username: ")
+            if validate_username(username):
+                break
+
         address = input("Address: ")
         aadhar = input("Aadhar: ")
         mobile = input("Mobile: ")
 
-        # Ask user to set MPIN
+        # MPIN validation
         while True:
             mpin = input("🔐 Set your 4-digit MPIN: ")
             if len(mpin) == 4 and mpin.isdigit():
@@ -44,18 +53,20 @@ def main():
 
         register_user(username, address, aadhar, mobile, mpin)
 
-    # ----------------------------
+    # ============================
     # LOGIN
-    # ----------------------------
+    # ============================
     elif choice == 2:
+
         username = input("Username: ")
         user = login(username)
 
         if user:
             print(f"\n✅ Welcome {username}!")
 
-            # Keep showing menu until logout
+            # Show menu until logout
             while True:
+
                 show_menu()
 
                 try:
@@ -64,13 +75,11 @@ def main():
                     print("❌ Invalid input.")
                     continue
 
-                # OPTION 1 → View Account
+                # 1️⃣ View Account
                 if option == 1:
                     view_account_info(user[0])
 
-                
-
-                # OPTION 3 → Transfer Fund
+                # 2️⃣ Transfer Fund
                 elif option == 2:
                     try:
                         amount = float(input("Enter amount: "))
@@ -78,19 +87,19 @@ def main():
                     except ValueError:
                         print("❌ Invalid amount.")
 
-                # OPTION 4 → Change MPIN
+                # 3️⃣ Change MPIN
                 elif option == 3:
                     change_mpin(user[0])
 
-                # OPTION 5 → Register New Credit Card
+                # 4️⃣ Register Credit Card
                 elif option == 4:
                     register_new_credit_card(user[0])
 
-                # OPTION 6 → View Transactions
+                # 5️⃣ View Transactions
                 elif option == 5:
                     view_transactions(user[0])
 
-                # OPTION 7 → Logout
+                # 6️⃣ Logout
                 elif option == 6:
                     print("👋 Logged out successfully.")
                     break

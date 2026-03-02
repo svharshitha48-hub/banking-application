@@ -75,16 +75,16 @@ def login(username):
         conn.close()
 
 
-# -----------------------------------------
+
 # TRANSFER FUND FUNCTION
-# -----------------------------------------
+
 def transfer_fund(user_id, amount):
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
 
     try:
         # Step 1: Verify MPIN
-        entered_pin = input("🔐 Enter your Debit Card MPIN: ")
+        entered_pin = input(" Enter your Debit Card MPIN: ")
 
         cursor.execute("""
             SELECT pin FROM cards
@@ -103,7 +103,7 @@ def transfer_fund(user_id, amount):
             return
 
         # Step 2: Ask receiver username
-        receiver_username = input("👤 Enter receiver username: ")
+        receiver_username = input(" Enter receiver username: ")
 
         cursor.execute("""
             SELECT id FROM users WHERE username=%s
@@ -157,7 +157,7 @@ def transfer_fund(user_id, amount):
         conn.commit()
 
         print("✅ Transfer successful!")
-        print(f"💸 ₹{amount} sent to {receiver_username}")
+        print(f" ₹{amount} sent to {receiver_username}")
 
     except Exception as e:
         conn.rollback()
@@ -168,9 +168,9 @@ def transfer_fund(user_id, amount):
         conn.close()
 
 
-# -----------------------------------------
+
 # VIEW ACCOUNT INFO
-# -----------------------------------------
+
 def view_account_info(user_id):
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
@@ -190,9 +190,9 @@ def view_account_info(user_id):
         print("\n" + "="*40)
         print("🏦 ACCOUNT DETAILS")
         print("="*40)
-        print(f"🔢 Account Number : {account[0]}")
-        print(f"🏷 Account Type   : {account[1]}")
-        print(f"💰 Balance        : ₹{account[2]}")
+        print(f" Account Number : {account[0]}")
+        print(f" Account Type   : {account[1]}")
+        print(f" Balance        : ₹{account[2]}")
         print("="*40)
 
     finally:
@@ -201,15 +201,15 @@ def view_account_info(user_id):
 
 
 
-# -----------------------------------------
+
 # CHANGE MPIN
-# -----------------------------------------
+
 def change_mpin(user_id):
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
 
     try:
-        old_pin = input("🔐 Enter current MPIN: ")
+        old_pin = input(" Enter current MPIN: ")
 
         cursor.execute("""
             SELECT pin FROM cards
@@ -226,7 +226,7 @@ def change_mpin(user_id):
             return
 
         while True:
-            new_pin = input("🔐 Enter new 4-digit MPIN: ")
+            new_pin = input(" Enter new 4-digit MPIN: ")
             if len(new_pin) == 4 and new_pin.isdigit():
                 break
             else:
@@ -250,9 +250,9 @@ def change_mpin(user_id):
         conn.close()
 
 
-# -----------------------------------------
+
 # REGISTER NEW CREDIT CARD
-# -----------------------------------------
+
 def register_new_credit_card(user_id):
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
@@ -277,9 +277,9 @@ def register_new_credit_card(user_id):
         conn.close()
 
 
-# -----------------------------------------
+
 # VIEW LAST 5 TRANSACTIONS
-# -----------------------------------------
+
 def view_transactions(user_id):
     conn = get_connection()
     cursor = conn.cursor(buffered=True)

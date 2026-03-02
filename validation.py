@@ -5,37 +5,26 @@ import re
 # -----------------------------
 # Username Validation
 # -----------------------------
-def validate_username(username: str) -> bool:
+
+def validate_username(username):
     """
-    Username must:
-    - Be 3–20 characters
-    - Contain only letters and numbers
+    Username Rules:
+    - Must start with a letter
+    - Can contain letters and numbers only
+    - Minimum 4 characters
     """
-    if not username:
-        print("Username cannot be empty.")
+
+    if len(username) < 4:
+        print("❌ Username must be at least 4 characters long.")
         return False
 
-    if not re.match(r"^[A-Za-z0-9]{3,20}$", username):
-        print("Username must be 3-20 characters, letters and numbers only.")
-        return False
+    pattern = r'^[A-Za-z][A-Za-z0-9]*$'
 
-    return True
-
-
-# -----------------------------
-# Mobile Number Validation
-# -----------------------------
-def validate_mobile(mobile: str) -> bool:
-    """
-    Mobile must:
-    - Be exactly 10 digits
-    """
-    if not re.match(r"^[0-9]{10}$", mobile):
-        print("Mobile number must be exactly 10 digits.")
+    if not re.match(pattern, username):
+        print("❌ Username must start with a letter and contain only letters & numbers.")
         return False
 
     return True
-
 
 # -----------------------------
 # Aadhar Validation
