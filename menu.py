@@ -1,6 +1,6 @@
 def show_menu():
     print("\n" + "="*50)
-    print("🏦 Welcome to Harshitha Bank")
+    print(" Welcome to Harshitha Bank")
     print("="*50)
     print("1️⃣  View Account Info")
     print("2️⃣  Transfer Fund")

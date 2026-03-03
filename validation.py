@@ -21,7 +21,7 @@ def validate_username(username):
     pattern = r'^[A-Za-z][A-Za-z0-9]*$'
 
     if not re.match(pattern, username):
-        print("❌ Username must start with a letter and contain only letters & numbers.")
+        print(" Username must start with a letter and contain only letters & numbers.")
         return False
 
     return True
@@ -40,6 +40,30 @@ def validate_aadhar(aadhar: str) -> bool:
 
     return True
 
+# -------------------------------
+# MOBILE VALIDATION (INDIA)
+# -------------------------------
+def validate_mobile(mobile):
+    """
+    Rules:
+    - Must be exactly 10 digits
+    - Must contain only numbers
+    - Must start with 6, 7, 8, or 9
+    """
+
+    if not mobile.isdigit():
+        print(" Mobile number must contain only digits.")
+        return False
+
+    if len(mobile) != 10:
+        print(" Mobile number must be exactly 10 digits.")
+        return False
+
+    if mobile[0] not in ['6', '7', '8', '9']:
+        print(" Mobile number must start with 6, 7, 8, or 9.")
+        return False
+
+    return True
 
 # -----------------------------
 # Amount Validation

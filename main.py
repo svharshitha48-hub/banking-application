@@ -9,8 +9,14 @@ from services import (
     view_transactions
 )
 
-# Import validation
-from validation import validate_username
+# Import validation functions
+from validation import (
+    validate_username,
+    validate_aadhar,
+    validate_mobile,
+    validate_pin,
+    validate_amount
+)
 
 # Import menu display function
 from menu import show_menu
@@ -25,7 +31,7 @@ def main():
     try:
         choice = int(input("Enter choice: "))
     except ValueError:
-        print("❌ Invalid input.")
+        print("Invalid input.")
         return
 
     # ============================
@@ -40,16 +46,24 @@ def main():
                 break
 
         address = input("Address: ")
-        aadhar = input("Aadhar: ")
-        mobile = input("Mobile: ")
 
+        # Aadhar validation
+        while True:
+            aadhar = input("Aadhar: ")
+            if validate_aadhar(aadhar):
+                break
+
+        # Mobile validation
+        while True:
+            mobile = input("Mobile: ")
+            if validate_mobile(mobile):
+                break
+                
         # MPIN validation
         while True:
-            mpin = input("🔐 Set your 4-digit MPIN: ")
-            if len(mpin) == 4 and mpin.isdigit():
+            mpin = input("Set your 4-digit MPIN: ")
+            if validate_pin(mpin):
                 break
-            else:
-                print("❌ MPIN must be exactly 4 digits.")
 
         register_user(username, address, aadhar, mobile, mpin)
 
@@ -62,17 +76,15 @@ def main():
         user = login(username)
 
         if user:
-            print(f"\n✅ Welcome {username}!")
+            print(f"\nWelcome {username}!")
 
-            # Show menu until logout
             while True:
-
                 show_menu()
 
                 try:
                     option = int(input("Select option: "))
                 except ValueError:
-                    print("❌ Invalid input.")
+                    print("Invalid input.")
                     continue
 
                 # 1️⃣ View Account
@@ -83,9 +95,11 @@ def main():
                 elif option == 2:
                     try:
                         amount = float(input("Enter amount: "))
+                        if not validate_amount(amount):
+                            continue
                         transfer_fund(user[0], amount)
                     except ValueError:
-                        print("❌ Invalid amount.")
+                        print("Invalid amount.")
 
                 # 3️⃣ Change MPIN
                 elif option == 3:
@@ -101,17 +115,17 @@ def main():
 
                 # 6️⃣ Logout
                 elif option == 6:
-                    print("👋 Logged out successfully.")
+                    print(" Logged out successfully.")
                     break
 
                 else:
-                    print("❌ Invalid option selected.")
+                    print("Invalid option selected.")
 
         else:
-            print("❌ User not found.")
+            print("User not found.")
 
     else:
-        print("❌ Invalid choice.")
+        print("Invalid choice.")
 
 
 if __name__ == "__main__":

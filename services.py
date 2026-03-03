@@ -42,13 +42,13 @@ def register_user(username, address, aadhar, mobile, mpin):
 
         conn.commit()
 
-        print("✅ Registration successful.")
-        print("🏦 Your Account Number is:", account_number)
+        print(" Registration successful.")
+        print(" Your Account Number is:", account_number)
         print("Please login.")
 
     except Exception as e:
         conn.rollback()
-        print("❌ Error during registration:", e)
+        print("Error during registration:", e)
 
     finally:
         cursor.close()
@@ -93,13 +93,13 @@ def transfer_fund(user_id, amount):
         card = cursor.fetchone()
 
         if not card:
-            print("❌ Debit card not found.")
+            print("Debit card not found.")
             return
 
         stored_pin = card[0]
 
         if entered_pin != stored_pin:
-            print("❌ Incorrect MPIN. Transaction cancelled.")
+            print("Incorrect MPIN. Transaction cancelled.")
             return
 
         # Step 2: Ask receiver username
@@ -111,13 +111,13 @@ def transfer_fund(user_id, amount):
         receiver = cursor.fetchone()
 
         if not receiver:
-            print("❌ Receiver not found.")
+            print("Receiver not found.")
             return
 
         receiver_id = receiver[0]
 
         if receiver_id == user_id:
-            print("❌ Cannot transfer to yourself.")
+            print("Cannot transfer to yourself.")
             return
 
         # Step 3: Check sender balance
@@ -127,11 +127,11 @@ def transfer_fund(user_id, amount):
         sender_balance = cursor.fetchone()
 
         if not sender_balance:
-            print("❌ Sender account not found.")
+            print("Sender account not found.")
             return
 
         if amount > sender_balance[0]:
-            print("❌ Insufficient balance.")
+            print("Insufficient balance.")
             return
 
         # Step 4: Deduct sender balance
@@ -156,12 +156,12 @@ def transfer_fund(user_id, amount):
 
         conn.commit()
 
-        print("✅ Transfer successful!")
+        print("Transfer successful!")
         print(f" ₹{amount} sent to {receiver_username}")
 
     except Exception as e:
         conn.rollback()
-        print("❌ Transfer failed:", e)
+        print("Transfer failed:", e)
 
     finally:
         cursor.close()
@@ -171,11 +171,13 @@ def transfer_fund(user_id, amount):
 
 # VIEW ACCOUNT INFO
 
+
 def view_account_info(user_id):
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
 
     try:
+        # Fetch account details
         cursor.execute("""
             SELECT account_number, account_type, balance
             FROM accounts
@@ -184,22 +186,22 @@ def view_account_info(user_id):
         account = cursor.fetchone()
 
         if not account:
-            print("❌ Account not found.")
+            print("Account not found.")
             return
 
-        print("\n" + "="*40)
-        print("🏦 ACCOUNT DETAILS")
-        print("="*40)
-        print(f" Account Number : {account[0]}")
-        print(f" Account Type   : {account[1]}")
-        print(f" Balance        : ₹{account[2]}")
-        print("="*40)
+        print("\n" + "="*50)
+        print("ACCOUNT DETAILS")
+        print("="*50)
+        print(f"Account Number  : {account[0]}")
+        print(f"Account Type    : {account[1]}")
+        print(f"Available Balance : ₹{account[2]}")
+        print("="*50)
+
+        
 
     finally:
         cursor.close()
         conn.close()
-
-
 
 
 # CHANGE MPIN
@@ -218,11 +220,11 @@ def change_mpin(user_id):
         card = cursor.fetchone()
 
         if not card:
-            print("❌ Debit card not found.")
+            print("Debit card not found.")
             return
 
         if old_pin != card[0]:
-            print("❌ Incorrect current MPIN.")
+            print("Incorrect current MPIN.")
             return
 
         while True:
@@ -230,7 +232,7 @@ def change_mpin(user_id):
             if len(new_pin) == 4 and new_pin.isdigit():
                 break
             else:
-                print("❌ MPIN must be exactly 4 digits.")
+                print("MPIN must be exactly 4 digits.")
 
         cursor.execute("""
             UPDATE cards
@@ -239,11 +241,11 @@ def change_mpin(user_id):
         """, (new_pin, user_id))
 
         conn.commit()
-        print("✅ MPIN updated successfully.")
+        print("MPIN updated successfully.")
 
     except Exception as e:
         conn.rollback()
-        print("❌ Error changing MPIN:", e)
+        print(" Error changing MPIN:", e)
 
     finally:
         cursor.close()
@@ -251,31 +253,49 @@ def change_mpin(user_id):
 
 
 
-# REGISTER NEW CREDIT CARD
-
+# -----------------------------------------
+# REGISTER NEW CREDIT CARD (MAX 4 LIMIT)
+# -----------------------------------------
 def register_new_credit_card(user_id):
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
 
     try:
-        cvv = str(random.randint(100, 999))
-
+        # Check how many credit cards user already has
         cursor.execute("""
-            INSERT INTO cards (user_id, card_type, pin, cvv)
-            VALUES (%s, %s, %s, %s)
-        """, (user_id, "Credit", "0000", cvv))
+            SELECT COUNT(*) FROM cards
+            WHERE user_id=%s AND card_type='Credit'
+        """, (user_id,))
+        count = cursor.fetchone()[0]
+
+        if count >= 4:
+            print("Maximum 4 credit cards allowed.")
+            return
+
+        # Generate 16-digit card number
+        card_number = str(random.randint(4000000000000000, 4999999999999999))
+
+        # Default PIN
+        pin = "0000"
+
+        # Insert card
+        cursor.execute("""
+            INSERT INTO cards (user_id, card_type, card_number, pin, cvv)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (user_id, "Credit", card_number, pin, str(random.randint(100, 999))))
 
         conn.commit()
-        print("✅ New Credit Card registered successfully.")
+
+        print("Credit Card registered successfully.")
+        print(f"Card Number: **** **** **** {card_number[-4:]}")
 
     except Exception as e:
         conn.rollback()
-        print("❌ Error registering credit card:", e)
+        print("Error registering credit card:", e)
 
     finally:
         cursor.close()
         conn.close()
-
 
 
 # VIEW LAST 5 TRANSACTIONS
@@ -296,12 +316,12 @@ def view_transactions(user_id):
         transactions = cursor.fetchall()
 
         if not transactions:
-            print("📭 No transactions found.")
+            print(" No transactions found.")
             return
 
-        print("\n📊 Last 5 Transactions:")
+        print("\n Last 5 Transactions:")
         for t in transactions:
-            print(f"{t[2]} | 💳 {t[1]} | ₹{t[0]}")
+            print(f"{t[2]} | {t[1]} | ₹{t[0]}")
 
     finally:
         cursor.close()
