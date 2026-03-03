@@ -8,7 +8,6 @@ from services import (
     register_new_credit_card,
     view_transactions
 )
-
 # Import validation functions
 from validation import (
     validate_username,

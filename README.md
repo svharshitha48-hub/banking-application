@@ -7,7 +7,7 @@
 
 ---
 
-## 📌 Project Overview
+## Project Overview
 
 The **Harshitha Banking Application** is a console-based banking system built using **Python and MySQL**.
 
@@ -26,7 +26,7 @@ The project follows a **modular architecture**, separating business logic, datab
 
 ---
 
-# 🎯 Features Implemented
+# Features Implemented
 
 ## 1️⃣ User Registration
 - Collects:
@@ -99,7 +99,7 @@ This simulates **UPI-style username-based transfers**.
 
 ---
 
-# 🗂 Project Structure
+# Project Structure
 
 ```
 Harshitha_Banking_Application/
@@ -114,7 +114,7 @@ Harshitha_Banking_Application/
 
 ---
 
-# 🛠 Technologies Used
+# Technologies Used
 
 - Python 3
 - MySQL
@@ -124,7 +124,7 @@ Harshitha_Banking_Application/
 
 ---
 
-# 🗄 Database Tables
+# Database Tables
 
 ### users
 Stores user personal information.
@@ -140,7 +140,7 @@ Stores transfer records.
 
 ---
 
-# 🚀 How To Run The Project
+#  How To Run The Project
 
 ## Step 1: Install Dependency
 
@@ -202,7 +202,7 @@ python3 main.py
 
 ---
 
-# 📊 Evaluation Criteria Covered
+#  Evaluation Criteria Covered
 
 ✔ Use of Python Functions  
 ✔ Modular Code Structure  
@@ -216,7 +216,7 @@ python3 main.py
 
 ---
 
-# 🏦 Real-World Banking Concepts Implemented
+# Real-World Banking Concepts Implemented
 
 - Account Creation
 - Debit/Credit Card Allocation
@@ -229,7 +229,7 @@ python3 main.py
 
 ---
 
-# 🔒 Security Implemented
+# Security Implemented
 
 - MPIN required for transfer
 - MPIN required for change
@@ -239,7 +239,7 @@ python3 main.py
 
 ---
 
-# 📌 Assumptions
+# Assumptions
 
 - Username is unique
 - Initial account balance is ₹10,000
@@ -248,7 +248,7 @@ python3 main.py
 
 ---
 
-# 📈 Future Enhancements
+# Future Enhancements
 
 - Daily transfer limit
 - 3 wrong MPIN attempts lock
@@ -259,7 +259,7 @@ python3 main.py
 
 ---
 
-# 👩‍💻 Developed By
+# Developed By
 
 **Harshitha**  
 Python Banking Application Project  
